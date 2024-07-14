@@ -1,45 +1,44 @@
-#ifndef __LIST_H__
-#define __LIST_H__
+#ifndef __L87_LIST_H__
+#define __L87_LIST_H__
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <memory>
-
-template<typename T>
-class list {
+template<typename Type>
+class List {
 public:
-	struct list_node {
-		T* _value;
-		list_node* _prev, * _next;
-		list_node() : _prev(nullptr), _next(nullptr) { _value = nullptr; }
-		list_node(list_node* prev, list_node* next) : _prev(prev), _next(next) { _value = nullptr; }
-		list_node(const T& value, list_node* prev = nullptr, list_node* next = nullptr) : _prev(prev), _next(next) { _value = new T(value); }
-		T& operator*() { return *_value; }
+	struct Node {
+		Type* _value;
+		Node* _prev, * _next;
+		Node() : _prev(nullptr), _next(nullptr) { _value = nullptr; }
+		Node(Node* prev, Node* next) : _prev(prev), _next(next) { _value = nullptr; }
+		Node(Type& value, Node* prev = nullptr, Node* next = nullptr) : _prev(prev), _next(next) { _value = new Type(value); }
+		Type& operator*() { return *_value; }
 	};
 
 	class iterator {
 	private:
-		list_node* _ptr;
+		Node* _ptr;
 		// TBD 其它信息
 	public:
-		iterator(list_node* ptr);
+		iterator(Node* ptr);
 		iterator& operator++();
 		iterator& operator--();
 		bool operator== (const iterator& it);
 		bool operator!= (const iterator& it);
-		T& operator*() { return **_ptr; }
+		Type& operator*() { return **_ptr; }
+		Node* operator&() {
+			return _ptr;
+		}
 	};
 
 private:
-	list_node dummy;
-	list_node* head = &dummy;
-	list_node* tail = &dummy;
+	Node dummy;
+	Node* head = &dummy;
+	Node* tail = &dummy;
 public:
-	list();
+	List();
 public:
 	iterator& operator[] (int index);
-	list& operator+= (const T& value);
+	List& operator+= (Type& value);
+	iterator append(Type& value);
 public:
 	iterator begin();
 	iterator end();
