@@ -76,36 +76,3 @@ TEMPLATE(typename ITERATOR) ADT::append(Type& value) {
 #undef ADT
 #undef NODE
 #undef ITERATOR
-
-// #define __DEBUG_LIST__ 
-#ifdef __DEBUG_LIST__
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <memory>
-
-struct Test {
-	int num;
-	std::string str;
-	Test() {}
-	Test(const Test& t) {
-		*this = t;
-	}
-};
-
-int main() {
-	List<Test> list;
-	for (int i = 0; i < 255; ++i) {
-		Test t;
-		t.str = std::to_string(i + 1);
-		t.num = i + 1;
-		list += t;
-	}
-
-	for (auto item : list) {
-		std::cout << "str:" << item.str << ". num:" << item.num << ". " << std::endl;
-	}
-	return 0;
-}
-#endif
