@@ -56,8 +56,12 @@ void print_times(string name, vector<long long>& nums) {
 
 int main() {
 	const int N = 1e6;
+	const int M1 = 3;
+	const int M2 = 5;
+
 	Tire<Test> tire;
 	unordered_map<string, Test> umap;
+
 	for (int i = 0; i < N; ++i) {
 		Test test;
 		test.num = i + 1;
@@ -70,51 +74,34 @@ int main() {
 		test.str = to_string(i + 1);
 		umap.insert({ test.str, test });
 	};
+
 	// group 1
-	umap_test(umap);
-	tire_test(tire);
-
-	umap_test(umap);
-	tire_test(tire);
-
-	umap_test(umap);
-	tire_test(tire);
+	for (int i = 0; i < M1; ++i) {
+		umap_test(umap);
+		tire_test(tire);
+	}
 
 	// group 2
-	tire_test(tire);
-	umap_test(umap);
-
-	tire_test(tire);
-	umap_test(umap);
-
-	tire_test(tire);
-	umap_test(umap);
+	for (int i = 0; i < M1; ++i) {
+		tire_test(tire);
+		umap_test(umap);
+	}
 
 	// group 3
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
-
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
+	for (int i = 0; i < M2; ++i) {
+		umap_test(umap);
+	}
+	for (int i = 0; i < M2; ++i) {
+		tire_test(tire);
+	}
 
 	// group 4
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
-	tire_test(tire);
-
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
-	umap_test(umap);
+	for (int i = 0; i < M2; ++i) {
+		tire_test(tire);
+	}
+	for (int i = 0; i < M2; ++i) {
+		umap_test(umap);
+	}
 
 	// 分析
 	print_times("umap", umap_times);

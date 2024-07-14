@@ -26,14 +26,14 @@ TEMPLATE(HOLDER) ADT::Tire() {
 TEMPLATE(typename ITERATOR) ADT::find(const std::string& key) {
 	Node* curr = &_root;
 	Node* next = nullptr;
-	for (char ch : key) {
-		next = curr[ch];
+	for (const char& ch : key) {
+		next = curr->_next[(const int)ch];
 		if (next == nullptr) {
-
+			return end();
 		}
 		curr = next;
 	}
-	return curr->is_word() ? curr : nullptr;
+	return curr->_value == nullptr ? end() : iterator(curr->_value);
 }
 
 TEMPLATE(Type&) ADT::operator[](const std::string& key) {
@@ -44,7 +44,7 @@ TEMPLATE(typename ITERATOR) ADT::insert(const std::string& key, Type& value) {
 	Node* curr = &_root;
 	Node* next = nullptr;
 	for (const char& ch : key) {
-		next = curr->_next[(int)ch];
+		next = curr->_next[(const int)ch];
 		if (next != nullptr) {
 			curr = next;
 			continue;
