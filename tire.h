@@ -5,8 +5,9 @@
 #include "list.cpp"
 #include <string>
 
-#define TIRE_NODE_NUMBER 128
-#define INDEX(x) ((const int)(x))
+const int TIRE_NODE_NUMBER = 128;
+const int UINT_SIZE = sizeof(unsigned int);
+const int BITMAP_NUMBER = TIRE_NODE_NUMBER / UINT_SIZE / 8;
 
 template<typename Type,
 	typename Container = List<Type>>
@@ -16,14 +17,15 @@ template<typename Type,
 			Node();
 			~Node();
 			Node* operator[](const int ch);
-			Node* _next[TIRE_NODE_NUMBER] { nullptr };
-			typename Container::Node* _value = nullptr;
+			Node* next[TIRE_NODE_NUMBER] { nullptr };
+			unsigned int bitmap[BITMAP_NUMBER] = { 0 };
+			typename Container::Node* value = nullptr;
 		};
 
 		typedef typename Container::iterator iterator;
 
 	private:
-		Node _root;
+		Node* _root = new Node();
 		Container _container;
 	public:
 		Tire();
