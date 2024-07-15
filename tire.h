@@ -5,15 +5,18 @@
 #include "list.cpp"
 #include <string>
 
+#define TIRE_NODE_NUMBER 128
+#define INDEX(x) ((const int)(x))
+
 template<typename Type,
 	typename Container = List<Type>>
 	class Tire {
 	public:
 		struct Node {
 			Node();
-			Node(Type& value);
+			~Node();
 			Node* operator[](const int ch);
-			Node* _next[256] { nullptr };
+			Node* _next[TIRE_NODE_NUMBER] { nullptr };
 			typename Container::Node* _value = nullptr;
 		};
 
@@ -24,6 +27,7 @@ template<typename Type,
 		Container _container;
 	public:
 		Tire();
+		~Tire();
 		Type& operator[](const std::string& key);
 		iterator find(const std::string& key);
 		iterator insert(const std::string& key, Type& value);

@@ -35,6 +35,15 @@ TEMPLATE(bool) ITERATOR::operator!= (const ITERATOR& it) {
 
 // #pragma region List<Type>
 TEMPLATE(HOLDER) ADT::List() : dummy(&dummy, &dummy) {};
+TEMPLATE(HOLDER) ADT::~List() {
+	Node* curr = head->_next;
+	Node* next = nullptr;
+	for (; curr != &dummy;) {
+		next = curr->_next;
+		delete curr;
+		curr = next;
+	}
+}
 
 TEMPLATE(typename ITERATOR) ADT::begin() { return ADT::iterator(head->_next); }
 

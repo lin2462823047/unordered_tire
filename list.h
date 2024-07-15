@@ -9,7 +9,8 @@ public:
 		Node* _prev, * _next;
 		Node() : _prev(nullptr), _next(nullptr) { _value = nullptr; }
 		Node(Node* prev, Node* next) : _prev(prev), _next(next) { _value = nullptr; }
-		Node(Type& value, Node* prev = nullptr, Node* next = nullptr) : _prev(prev), _next(next) { _value = new Type(value); }
+		Node(Type& value, Node* prev = nullptr, Node* next = nullptr) : _prev(prev), _next(next) { _value = &value; }
+		~Node() { _prev = _next = nullptr, _value = nullptr; }
 		Type& operator*() { return *_value; }
 	};
 
@@ -24,9 +25,7 @@ public:
 		bool operator== (const iterator& it);
 		bool operator!= (const iterator& it);
 		Type& operator*() { return **_ptr; }
-		Node* operator&() {
-			return _ptr;
-		}
+		Node* operator&() { return _ptr; }
 	};
 
 private:
@@ -35,6 +34,7 @@ private:
 	Node* tail = &dummy;
 public:
 	List();
+	~List();
 public:
 	iterator& operator[] (int index);
 	List& operator+= (Type& value);
