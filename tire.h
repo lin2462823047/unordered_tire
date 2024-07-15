@@ -2,7 +2,6 @@
 #define __L87_TIRE_H__
 
 #include "list.h"
-#include "list.cpp"
 #include <string>
 
 const int TIRE_NODE_NUMBER = 128;

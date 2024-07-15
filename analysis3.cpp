@@ -6,7 +6,6 @@
 using namespace std;
 
 #include "tire.h"
-#include "tire.cpp"
 
 const int N = 1e5;
 const int M1 = 3;
