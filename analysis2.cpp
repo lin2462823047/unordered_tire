@@ -8,6 +8,10 @@ using namespace std;
 #include "tire.h"
 #include "tire.cpp"
 
+const int N = 1e5;
+const int M1 = 3;
+const int M2 = 5;
+
 struct Test {
 	int num;
 	string str;
@@ -62,10 +66,6 @@ void print_times(string name, vector<long long>& nums) {
 }
 
 int main() {
-	const int N = 1e6;
-	const int M1 = 3;
-	const int M2 = 5;
-
 	Tire<Test> tire;
 	unordered_map<string, Test> umap;
 

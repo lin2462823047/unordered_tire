@@ -20,19 +20,37 @@ struct Test {
 vector<long long> umap_times;
 vector<long long> tire_times;
 
-void umap_test(unordered_map<string, Test>& umap) {
+void _umap_test() {
+	unordered_map<string, Test> umap;
+	for (int i = 0; i < N; ++i) {
+		Test test;
+		test.num = i + 1;
+		test.str = to_string(i + 1);
+		umap.insert({ test.str, test });
+	};
+}
+
+void _tire_test() {
+	Tire<Test> tire;
+	for (int i = 0; i < N; ++i) {
+		Test test;
+		test.num = i + 1;
+		test.str = to_string(i + 1);
+		tire.insert(test.str, test);
+	};
+}
+
+void umap_test() {
 	auto start = chrono::high_resolution_clock::now();
-	for (auto& [_, item] : umap) {
-	}
+	_umap_test();
 	auto end = chrono::high_resolution_clock::now();
 	auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 	umap_times.push_back(duration.count());
 }
 
-void tire_test(Tire<Test>& tire) {
+void tire_test() {
 	auto start = chrono::high_resolution_clock::now();
-	for (auto& item : tire) {
-	}
+	_tire_test();
 	auto end = chrono::high_resolution_clock::now();
 	auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 	tire_times.push_back(duration.count());
@@ -59,48 +77,32 @@ void print_times(string name, vector<long long>& nums) {
 }
 
 int main() {
-	Tire<Test> tire;
-	unordered_map<string, Test> umap;
-
-	for (int i = 0; i < N; ++i) {
-		Test test;
-		test.num = i + 1;
-		test.str = to_string(i + 1);
-		tire.insert(test.str, test);
-	};
-	for (int i = 0; i < N; ++i) {
-		Test test;
-		test.num = i + 1;
-		test.str = to_string(i + 1);
-		umap.insert({ test.str, test });
-	};
-
 	// group 1
 	for (int i = 0; i < M1; ++i) {
-		umap_test(umap);
-		tire_test(tire);
+		umap_test();
+		tire_test();
 	}
 
 	// group 2
 	for (int i = 0; i < M1; ++i) {
-		tire_test(tire);
-		umap_test(umap);
+		tire_test();
+		umap_test();
 	}
 
 	// group 3
 	for (int i = 0; i < M2; ++i) {
-		umap_test(umap);
+		umap_test();
 	}
 	for (int i = 0; i < M2; ++i) {
-		tire_test(tire);
+		tire_test();
 	}
 
 	// group 4
 	for (int i = 0; i < M2; ++i) {
-		tire_test(tire);
+		tire_test();
 	}
 	for (int i = 0; i < M2; ++i) {
-		umap_test(umap);
+		umap_test();
 	}
 
 	// 分析
