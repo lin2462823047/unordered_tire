@@ -32,12 +32,14 @@ template<typename Type,
 		Type& operator[](const std::string& key);
 		iterator find(const std::string& key);
 		iterator insert(const std::string& key, Type& value);
-		iterator erase(const std::string& key);
+		size_t erase(const std::string& key);
 	public:
 		iterator begin();
 		iterator end();
 		iterator rbegin();
 		iterator rend();
 };
+
+#include "tire.inl"
 
 #endif

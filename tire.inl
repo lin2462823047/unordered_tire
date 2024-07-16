@@ -90,8 +90,20 @@ TEMPLATE(typename ITERATOR) ADT::insert(const std::string& key, Type& value) {
 	return it;
 }
 
-TEMPLATE(typename ITERATOR) ADT::erase(const std::string& key) {
-	return false; // TBD
+TEMPLATE(size_t) ADT::erase(const std::string& key) {
+	Node* curr = _root;
+	Node* next = nullptr;
+	for (const char& ch : key) {
+		next = curr->next[INDEX(ch)];
+		if (next == nullptr) {
+			return 0;
+		}
+		curr = next;
+	}
+	size_t res = curr->value == nullptr ? 0 : 1;
+	_container.erase(curr->value);
+	curr->value = nullptr;
+	return res;
 }
 
 TEMPLATE(typename ITERATOR) ADT::begin() { return _container.begin(); }

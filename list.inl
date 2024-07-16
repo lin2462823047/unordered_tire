@@ -45,6 +45,24 @@ TEMPLATE(HOLDER) ADT::~List() {
 	}
 }
 
+TEMPLATE(size_t) ADT::erase(Type& target) {
+	Node* curr = head->_next;
+	Node* next = nullptr;
+	for (; curr != &dummy;) {
+		if (curr->_value == target) {
+			erase(curr->value);
+			return (size_t)1ull;
+		}
+	}
+	return (size_t)0ull;
+}
+
+TEMPLATE(void) ADT::erase(Node* node) {
+	node->_prev->_next = node->_next;
+	node->_next->_prev = node->_prev;
+	delete node;
+}
+
 TEMPLATE(typename ITERATOR) ADT::begin() { return ADT::iterator(head->_next); }
 
 TEMPLATE(typename ITERATOR) ADT::end() { return ADT::iterator(head); }

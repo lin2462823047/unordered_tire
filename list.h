@@ -1,6 +1,8 @@
 #ifndef __L87_LIST_H__
 #define __L87_LIST_H__
 
+#include <crtdefs.h>
+
 template<typename Type>
 class List {
 public:
@@ -35,6 +37,8 @@ private:
 public:
 	List();
 	~List();
+	size_t erase(Type& target);
+	void erase(Node* node);
 public:
 	iterator& operator[] (int index);
 	List& operator+= (Type& value);
@@ -46,5 +50,6 @@ public:
 	iterator rend();
 };
 
+#include "list.inl"
 
 #endif
