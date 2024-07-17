@@ -19,7 +19,7 @@ inline int bit_weight(unsigned int x) {
 	x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
 	x = (x & 0x0f0f0f0f) + ((x >> 4) & 0x0f0f0f0f);
 	x = (x & 0x00ff00ff) + ((x >> 8) & 0x00ff00ff);
-	x = (x & 0x0000ffff) + ((x >> 16) & 0x0000ffff);
+	// x = (x & 0x0000ffff) + ((x >> 16) & 0x0000ffff);
 	return (int)x;
 }
 
@@ -29,21 +29,15 @@ TEMPLATE(HOLDER) NODE::Node() {
 }
 
 TEMPLATE(HOLDER) NODE::~Node() {
-	int index = 0;
-	for (int i = 0; i < BITMAP_NUMBER; ++i) {
-		unsigned int bmap = bitmap[i];
-		// lowbit 取最低非零位
-		// 汉明重量 计算最低非零位位置
-		for (; bmap != 0;) {
-			unsigned int x = lowbit(bmap);
-			int y = bit_weight(x - 1u);
-			delete next[index + y];
-			next[index + y] = nullptr;
-			bmap -= x;
-		}
-		index += (2 << UINT_SIZE);
+	// lowbit 取最低非零位
+	// 汉明重量 计算最低非零位位置
+	for (unsigned int bmap = bitmap; bmap != 0;) {
+		unsigned int x = lowbit(bmap);
+		int y = bit_weight(x - 1u);
+		delete next[y];
+		next[y] = nullptr;
+		bmap -= x;
 	}
-	value = nullptr;
 }
 // #pragma endregion
 
@@ -60,11 +54,24 @@ TEMPLATE(typename ITERATOR) ADT::find(const std::string& key) {
 	Node* curr = _root;
 	Node* next = nullptr;
 	for (const char& ch : key) {
-		next = curr->next[INDEX(ch)];
-		if (next == nullptr) {
-			return end();
+		{
+			// 高 4 位
+			unsigned int h = ((unsigned char)ch >> 4) & 0x0fu;
+			next = curr->next[h];
+			if (next == nullptr) {
+				return end();
+			}
+			curr = next;
 		}
-		curr = next;
+		{
+			// 低 4 位
+			unsigned int l = ch & 0x0fu;
+			next = curr->next[l];
+			if (next == nullptr) {
+				return end();
+			}
+			curr = next;
+		}
 	}
 	return curr->value == nullptr ? end() : iterator(curr->value);
 }
@@ -77,13 +84,30 @@ TEMPLATE(typename ITERATOR) ADT::insert(const std::string& key, Type& value) {
 	Node* curr = _root;
 	Node* next = nullptr;
 	for (const char& ch : key) {
-		next = curr->next[INDEX(ch)];
-		if (next != nullptr) {
-			curr = next;
-			continue;
+		{
+			// 高 4 位
+			unsigned int h = ((unsigned char)ch >> 4) & 0x0fu;
+			next = curr->next[h];
+			if (next == nullptr) {
+				curr->bitmap |= 0x01u << h;
+				curr = curr->next[h] = new Node();
+			}
+			else {
+				curr = next;
+			}
 		}
-		curr->bitmap[(int)((unsigned int)ch >> (UINT_SIZE + 1))] |= 0x01u << ((unsigned int)ch & 0x1fu);
-		curr = curr->next[INDEX(ch)] = new Node();
+		{
+			// 低 4 位
+			unsigned int l = ch & 0x0fu;
+			next = curr->next[l];
+			if (next == nullptr) {
+				curr->bitmap |= 0x01u << l;
+				curr = curr->next[l] = new Node();
+			}
+			else {
+				curr = next;
+			}
+		}
 	}
 	iterator it = _container.append(value);
 	curr->value = &it;
@@ -94,11 +118,24 @@ TEMPLATE(size_t) ADT::erase(const std::string& key) {
 	Node* curr = _root;
 	Node* next = nullptr;
 	for (const char& ch : key) {
-		next = curr->next[INDEX(ch)];
-		if (next == nullptr) {
-			return 0;
+		{
+			// 高 4 位
+			unsigned int h = ((unsigned char)ch >> 4) & 0x0fu;
+			next = curr->next[h];
+			if (next == nullptr) {
+				return 0;
+			}
+			curr = next;
 		}
-		curr = next;
+		{
+			// 低 4 位
+			unsigned int l = ch & 0x0fu;
+			next = curr->next[l];
+			if (next == nullptr) {
+				return 0;
+			}
+			curr = next;
+		}
 	}
 	size_t res = curr->value == nullptr ? 0 : 1;
 	_container.erase(curr->value);
